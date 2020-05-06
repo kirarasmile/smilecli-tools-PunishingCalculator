@@ -1,0 +1,257 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>战双简易版计算器</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+  </head>
+
+  <body>
+    <div class="layui-row" id="ex">
+      <fieldset class="layui-elem-field">
+        <legend>战双材料计算器</legend>
+        <div class="layui-field-box">
+          个人手写解压用，有问题请点击右下角的shields找到联系方式反馈
+        </div>
+      </fieldset>
+      <div class="layui-col-xs12 layui-col-sm12 layui-col-md4 layui-col-md-offset4">
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+          <ul class="layui-tab-title">
+            <li class="layui-this">构造体经验</li>
+            <li>意识经验和突破</li>
+            <li>武器经验和突破(没做)</li>
+            <li>构造体技能点(鸽了)</li>
+          </ul>
+          <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-form-item">
+                  <label class="layui-form-label">现在的等级</label>
+                  <div class="layui-input-block">
+                    <input type="text" v-model="expStart" name="" placeholder="输入你现在的等级" autocomplete="off" class="layui-input" >
+                  </div>
+                </div>
+                <div class="layui-form-item">
+                  <label class="layui-form-label">想要的等级</label>
+                  <div class="layui-input-block">
+                    <input type="text" v-model="expEnd" name="" placeholder="输入你想要的等级" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+                <div>
+                  <button class="layui-btn" v-on:click="exp">让我康康</button>
+                </div>
+                <div> 
+                  理论需要经验{{ expOutPut }}<br />
+                  需要绿瓶{{ expOutPut/gdog }}个<br />或<br />
+                  需要蓝瓶{{ expOutPut/bdog }}个<br />或<br />
+                  需要紫瓶{{ expOutPut/pdog }}个<br />或<br />
+                  需要大紫瓶{{ expOutPut/hdog }}个
+                </div>
+                <div>
+                  <table class="layui-table">
+                    <colgroup>
+                      <col width="150">
+                      <col width="200">
+                      <col>
+                    </colgroup>
+                    <thead>
+                      <tr>
+                        <th>狗粮种类</th>
+                        <th>经验</th>
+                      </tr> 
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>绿瓶</td>
+                        <td>100</td>
+                      </tr>
+                      <tr>
+                        <td>蓝瓶</td>
+                        <td>1000</td>
+                      </tr>
+                      <tr>
+                        <td>紫瓶</td>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>大紫瓶</td>
+                        <td>20000</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+              <div class="layui-form-item">
+                <label class="layui-form-label">突破等级(now)</label>
+                <div class="layui-input-block">
+                  <select  v-model="mindLv">
+                    <option disabled value="">突破等级</option>
+                    <option>0</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                  </select>
+                </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">现在的等级</label>
+                <div class="layui-input-block">
+                  <input type="text" v-model="mindExp" name="" placeholder="输入你现在的等级" autocomplete="off" class="layui-input" >
+                </div>
+              </div>
+              <label class="layui-form-label">突破等级(new)</label>
+              <div class="layui-input-block">
+                <select  v-model="mindNewLv">
+                  <option disabled value="">突破等级</option>
+                  <option>0</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                </select>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">想要的等级</label>
+                <div class="layui-input-block">
+                  <input type="text" v-model="mindNewExp" name="" placeholder="输入你想要的等级" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+              <div>
+                <button class="layui-btn" v-on:click="mExp">让我康康</button>
+              </div>
+              <div> 
+                理论需要经验{{ mindSumLv }}<br />
+                需要螺母(包含突破){{ mindSumMoney }}<br />
+                需要绿狗粮(二星){{ Asum/50 }}个<br />或<br />
+                需要蓝狗粮(三星){{ Asum/100 }}个<br />或<br />
+                需要紫狗粮(四星){{ Asum/300 }}个<br />或<br />
+                需要黄狗粮(五星){{ Asum/500 }}个<br />或<br />
+                需要橙狗粮(六星){{ Asum/700 }}个<br />不会真的有人拿5星、6星意识去喂吧？不会吧？<br />
+              </div>
+              <div>
+                <table class="layui-table">
+                  <colgroup>
+                    <col width="150">
+                    <col width="200">
+                    <col>
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th>狗粮品级</th>
+                      <th>经验</th>
+                      <th>螺母</th>
+                    </tr> 
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>绿</td>
+                      <td>50</td>
+                      <td>500</td>
+                    </tr>
+                    <tr>
+                      <td>蓝</td>
+                      <td>100</td>
+                      <td>1000</td>
+                    </tr>
+                    <tr>
+                      <td>紫</td>
+                      <td>300</td>
+                      <td>3000</td>
+                    </tr>
+                    <tr>
+                      <td>黄</td>
+                      <td>500</td>
+                      <td>5000</td>
+                    </tr>
+                    <tr>
+                      <td>橙</td>
+                      <td>700</td>
+                      <td>7000</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div>
+                <table class="layui-table">
+                  <colgroup>
+                    <col width="150">
+                    <col width="200">
+                    <col>
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th>突破材料</th>
+                      <th>突破1(25上30)</th>
+                      <th>突破2(30上35)</th>
+                      <th>突破3(35上40)</th>
+                      <th>突破4(40上45)</th>
+                      <th>总数</th>
+                    </tr> 
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>蓝管</td>
+                      <td>4</td>
+                      <td>4</td>
+                      <td>3</td>
+                      <td>3</td>
+                      <td>14</td>
+                    </tr>
+                    <tr>
+                      <td>蓝石</td>
+                      <td>0</td>
+                      <td>4</td>
+                      <td>3</td>
+                      <td>3</td>
+                      <td>10</td>
+                    </tr>
+                    <tr>
+                      <td>紫管</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>3</td>
+                      <td>5</td>
+                      <td>8</td>
+                    </tr>
+                    <tr>
+                      <td>紫石</td>
+                      <td>0</td>
+                      <td>0</td>  
+                      <td>3</td>
+                      <td>5</td>
+                      <td>8</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="layui-tab-item">我tm摸爆</div>
+            <div class="layui-tab-item">我tm摸爆</div>
+          </div>
+        </div>      
+      </div>
+    </div>
+    </div>
+    <div style="margin-left: 80%">
+      <a href="https://aboutme.kirarasmile.cn/">
+      <img src="https://img.shields.io/badge/made%20by-KiraRaSmile-blueviolet?style=plastic">
+      </a>
+    </div>
+  </body>
+</html>
+<script src="../layui/layui.all.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="../run.js"></script>
+
+<script>
+  layui.use('element', function(){
+  var element = layui.element;
+  //一些事件监听
+  element.on('tab(docDemoTabBrief)', function(data){
+    console.log(data);
+  });
+});
+
+</script>
